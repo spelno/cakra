@@ -3,63 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Yayasan Cakra Proletariat</title>
-    <!-- Tailwind CSS untuk desain modern & mobile-friendly -->
+    <title>YCP - Secure Gateway</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons untuk ikon profesional -->
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
-        .glass-card { background: white; border: 1px solid #e2e8f0; border-radius: 2rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
-        .btn-login { background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); transition: all 0.3s; }
-        .btn-login:active { transform: scale(0.98); }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: radial-gradient(circle at top right, #1e3a8a, #0f172a);
+            overflow: hidden;
+        }
+        .glass-container {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2.5rem;
+        }
+        .input-glass {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .input-glass:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        .btn-glow {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
+            transition: all 0.3s;
+        }
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.5);
+        }
+        /* Animasi Latar Belakang */
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(29, 78, 216, 0.1));
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+            animation: move 20s infinite alternate;
+        }
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(20%, 20%); }
+        }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <div class="w-full max-w-md glass-card p-8 space-y-8">
-        <!-- Logo & Title -->
-        <div class="text-center">
-            <div class="bg-blue-600 w-16 h-16 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-blue-200">
-                <i data-lucide="scale" class="text-white w-8 h-8"></i>
+    <!-- Dekorasi Latar Belakang -->
+    <div class="blob"></div>
+
+    <div class="w-full max-w-[420px] glass-container p-10 relative overflow-hidden">
+        <!-- Shine Effect -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent opacity-50"></div>
+
+        <!-- Branding -->
+        <div class="text-center mb-10">
+            <div class="inline-flex p-4 rounded-3xl bg-blue-600/20 border border-blue-500/30 mb-6">
+                <i data-lucide="shield-half" class="w-10 h-10 text-blue-400"></i>
             </div>
-            <h1 class="text-2xl font-bold text-slate-800">Cakra Proletariat</h1>
-            <p class="text-slate-500 text-sm italic">Sistem Manajemen Perkara & Hukum</p>
+            <h1 class="text-3xl font-bold text-white tracking-tight">Cakra Proletariat</h1>
+            <p class="text-blue-200/60 text-sm mt-2 font-light">Internal Legal System Access</p>
         </div>
 
-        <!-- Login Form -->
-        <div class="space-y-5">
-            <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase ml-1 mb-1 tracking-wider">Username</label>
+        <!-- Login Fields -->
+        <div class="space-y-6">
+            <div class="group">
+                <label class="block text-[11px] font-bold text-blue-400 uppercase tracking-[0.2em] mb-2 ml-1">Identity</label>
                 <div class="relative">
-                    <i data-lucide="user" class="absolute left-3 top-3 w-5 h-5 text-slate-300"></i>
-                    <input type="text" id="username" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-700" placeholder="Masukkan username">
+                    <i data-lucide="user" class="absolute left-4 top-4 w-5 h-5 text-blue-400/50"></i>
+                    <input type="text" id="username" 
+                        class="w-full input-glass pl-12 pr-4 py-4 rounded-2xl outline-none text-white placeholder-blue-300/20" 
+                        placeholder="Username">
                 </div>
             </div>
 
-            <div>
-                <label class="block text-xs font-bold text-slate-400 uppercase ml-1 mb-1 tracking-wider">Password</label>
+            <div class="group">
+                <label class="block text-[11px] font-bold text-blue-400 uppercase tracking-[0.2em] mb-2 ml-1">Credential</label>
                 <div class="relative">
-                    <i data-lucide="lock" class="absolute left-3 top-3 w-5 h-5 text-slate-300"></i>
-                    <input type="password" id="password" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-700" placeholder="••••••••">
+                    <i data-lucide="key-round" class="absolute left-4 top-4 w-5 h-5 text-blue-400/50"></i>
+                    <input type="password" id="password" 
+                        class="w-full input-glass pl-12 pr-4 py-4 rounded-2xl outline-none text-white placeholder-blue-300/20" 
+                        placeholder="Password">
                 </div>
             </div>
 
-            <button onclick="handleLogin()" id="btnLogin" class="w-full btn-login text-white font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2 mt-6">
-                <span>Masuk Ke Sistem</span>
-                <i data-lucide="log-in" class="w-5 h-5"></i>
+            <button onclick="handleLogin()" id="btnLogin" 
+                class="w-full btn-glow text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 mt-8">
+                <span>AUTHENTICATE</span>
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
             </button>
         </div>
 
-        <div class="text-center pt-4">
-            <p class="text-[10px] text-slate-400 font-medium uppercase tracking-widest">Official Branding by</p>
-            <p class="text-xs font-bold text-blue-600 italic">Notes of OD</p>
+        <!-- Footer -->
+        <div class="mt-12 text-center border-t border-white/5 pt-6">
+            <p class="text-[10px] text-blue-300/30 uppercase tracking-[0.3em] font-medium">Verified Identity</p>
+            <p class="text-sm font-bold text-blue-400/80 mt-1 italic">Notes of OD</p>
         </div>
     </div>
 
     <script>
-        // Gunakan URL Web App dari GAS Anda
+        // Gunakan URL Web App dari GAS Anda yang ada di image_99a8bb.png
         const API_URL = "https://script.google.com/macros/s/AKfycbzJQ3IOh1luGmUZpMwk2xWqusobMf6AwwPgkzejXwwninByd7WFUMPjPz35AJca27Di/exec";
 
         async function handleLogin() {
@@ -68,44 +122,43 @@
             const btn = document.getElementById('btnLogin');
 
             if(!userVal || !passVal) {
-                alert("Mohon isi username dan password!");
+                alert("Please enter your credentials.");
                 return;
             }
 
+            // UI Loading State
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> <span>Memverifikasi...</span>`;
+            btn.classList.add('opacity-70');
+            btn.innerHTML = `<i data-lucide="refresh-cw" class="w-5 h-5 animate-spin"></i> <span>SECURE CHECK...</span>`;
             lucide.createIcons();
 
             try {
-                // Request ke Google Apps Script
                 const response = await fetch(`${API_URL}?action=login&u=${userVal}&p=${passVal}`);
                 const res = await response.json();
 
                 if (res.success) {
-                    // Simpan identitas user di LocalStorage
                     localStorage.setItem("ycp_user", JSON.stringify(res.user));
-
-                    // Pengalihan berdasarkan ROLE dari Database
+                    
+                    // Redirect Logic
                     if (res.user.role === "DIREKTUR") {
                         window.location.href = "direktur.html";
-                    } else if (res.user.role === "USER") {
-                        window.location.href = "anggota.html";
                     } else {
-                        window.location.href = "guest.html";
+                        window.location.href = "anggota.html";
                     }
                 } else {
-                    alert("Gagal: " + res.message);
+                    alert("Authentication Failed: " + res.message);
                 }
             } catch (e) {
-                alert("Kesalahan Koneksi: Pastikan Web App sudah di-deploy sebagai 'Anyone'.");
+                alert("Network Error. Check your deployment settings.");
             }
 
             btn.disabled = false;
-            btn.innerHTML = `<span>Masuk Ke Sistem</span> <i data-lucide="log-in" class="w-5 h-5"></i>`;
+            btn.classList.remove('opacity-70');
+            btn.innerHTML = `<span>AUTHENTICATE</span> <i data-lucide="arrow-right" class="w-5 h-5"></i>`;
             lucide.createIcons();
         }
 
-        // Inisialisasi ikon Lucide
+        // Init Icons
         lucide.createIcons();
     </script>
 </body>
