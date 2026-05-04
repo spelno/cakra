@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Direktur - YCP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .stat-card { background: white; border: 1px solid #e2e8f0; border-radius: 1.5rem; padding: 1.25rem; }
+        .direktur-gradient { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- PROTEKSI SESSION (Hanya DIREKTUR) -->
+    <script>
+        const user = JSON.parse(localStorage.getItem("ycp_user"));
+        if (!user || user.role !== "DIREKTUR") {
+            window.location.href = "index.html"; 
+        }
+    </script>
+
+    <!-- HEADER DIREKTUR -->
+    <header class="direktur-gradient text-white p-6 rounded-b-[2.5rem] shadow-xl mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+                <img id="dirFoto" src="https://via.placeholder.com/150" class="w-12 h-12 rounded-full border-2 border-blue-400 object-cover">
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest text-blue-300 font-bold">Pimpinan Yayasan</p>
+                    <h1 id="dirName" class="text-lg font-bold italic">Notes of OD</h1>
+                </div>
+            </div>
+            <button onclick="logout()" class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-all">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="px-5 space-y-6">
+        <!-- RINGKASAN PERFORMA -->
+        <div class="grid grid-cols-2 gap-4">
+            <div class="stat-card">
+                <div class="flex items-center gap-2 mb-2">
+                    <i data-lucide="briefcase" class="w-4 h-4 text-blue-600"></i>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase">Total Kasus</span>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800">24</h2>
+            </div>
+            <div class="stat-card">
+                <div class="flex items-center gap-2 mb-2">
+                    <i data-lucide="alert-triangle" class="w-4 h-4 text-orange-500"></i>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase">Konflik Data</span>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800">3</h2>
+            </div>
+        </div>
+
+        <!-- MANAJEMEN ANGGOTA -->
+        <section>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="users" class="text-blue-600 w-5 h-5"></i>
+                    Manajemen Anggota
+                </h2>
+                <button class="text-xs font-bold text-blue-600 uppercase">+ Anggota</button>
+            </div>
+            <div id="memberList" class="space-y-3">
+                <!-- Data Anggota akan di-load di sini -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-slate-100 rounded-full"></div>
+                        <div class="h-4 bg-slate-100 rounded w-24"></div>
+                    </div>
+                    <div class="w-8 h-8 bg-slate-50 rounded-full"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MONITOR PERKARA GLOBAL -->
+        <section>
+            <h2 class="font-bold text-slate-800 flex items-center gap-2 mb-4">
+                <i data-lucide="activity" class="text-blue-600 w-5 h-5"></i>
+                Monitoring Seluruh Perkara
+            </h2>
+            <div id="globalCaseList" class="space-y-4">
+                <!-- Item Perkara -->
+            </div>
+        </section>
+    </main>
+
+    <!-- NAVIGASI BAWAH -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-8 py-4 flex justify-between items-center z-50 rounded-t-[2rem] shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+        <button class="flex flex-col items-center gap-1 text-blue-600">
+            <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
+            <span class="text-[9px] font-bold uppercase">Monitor</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400" onclick="alert('Laporan sedang disiapkan')">
+            <i data-lucide="file-bar-chart" class="w-6 h-6"></i>
+            <span class="text-[9px] font-bold uppercase">Laporan</span>
+        </button>
+        <button class="flex flex-col items-center gap-1 text-slate-400" onclick="alert('Menu Pengaturan')">
+            <i data-lucide="settings" class="w-6 h-6"></i>
+            <span class="text-[9px] font-bold uppercase">Setting</span>
+        </button>
+    </nav>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbzJQ3IOh1luGmUZpMwk2xWqusobMf6AwwPgkzejXwwninByd7WFUMPjPz35AJca27Di/exec"; // GANTI DENGAN URL GAS ANDA
+        
+        document.getElementById('dirName').innerText = user.nama;
+        if(user.foto) document.getElementById('dirFoto').src = user.foto;
+
+        async function initDashboard() {
+            // Memanggil semua perkara (karena role Direktur, backend akan kirim semua data)
+            try {
+                const res = await fetch(`${API_URL}?action=getPerkara&role=${user.role}&nama=${user.nama}`);
+                const data = await res.json();
+                renderGlobalCases(data);
+                // Simulasi load anggota - idealnya ada action khusus getMembers di GAS
+                loadMembers();
+            } catch (e) {
+                console.error("Gagal memuat dashboard", e);
+            }
+        }
+
+        function renderGlobalCases(cases) {
+            const list = document.getElementById('globalCaseList');
+            list.innerHTML = cases.map(c => `
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-[9px] font-black text-blue-600 bg-blue-50 px-2 py-1 rounded italic">PIC: ${c.pic || 'Belum Ditunjuk'}</span>
+                        <span class="text-[10px] font-bold text-slate-400">${c.id_reg}</span>
+                    </div>
+                    <h4 class="font-bold text-slate-800">${c.klien}</h4>
+                    <div class="mt-4 pt-3 border-t border-dashed border-slate-100 flex items-center justify-between">
+                        <div class="flex flex-col">
+                            <span class="text-[8px] uppercase font-bold text-slate-400 tracking-tighter">Status Terakhir</span>
+                            <span class="text-xs font-bold text-slate-600">${c.manual || c.sipp || 'Menunggu'}</span>
+                        </div>
+                        <button class="bg-slate-50 p-2 rounded-lg text-blue-600">
+                            <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function loadMembers() {
+            // Bagian ini akan mengambil data dari sheet DB_USER nantinya
+            const list = document.getElementById('memberList');
+            // Contoh statis (nantinya ditarik dari backend)
+            const members = [
+                {nama: "Staf Advokat 1", jabatan: "Advokat", role: "USER"},
+                {nama: "Staf Lapangan 2", jabatan: "Paralegal", role: "USER"}
+            ];
+
+            list.innerHTML = members.map(m => `
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                            ${m.nama.charAt(0)}
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">${m.nama}</p>
+                            <p class="text-[10px] text-slate-400 uppercase font-bold">${m.jabatan}</p>
+                        </div>
+                    </div>
+                    <button class="p-2 text-slate-300 hover:text-blue-600 transition-all">
+                        <i data-lucide="edit-3" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+
+        initDashboard();
+        lucide.createIcons();
+    </script>
+</body>
+</html>
