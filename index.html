@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yayasan Cakra Proletariat - System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 1); }
+        .btn-primary { background-color: #2563eb; transition: all 0.3s; }
+        .btn-primary:hover { background-color: #1d4ed8; transform: translateY(-1px); }
+        .legal-gradient { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- HALAMAN LOGIN -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-md w-full glass-card p-8 rounded-3xl shadow-xl">
+            <div class="text-center mb-8">
+                <div class="legal-gradient w-16 h-16 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg">
+                    <i data-lucide="scale" class="text-white w-8 h-8"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-slate-900">Cakra Proletariat</h1>
+                <p class="text-slate-500 text-sm">Sistem Manajemen Perkara & Hukum</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase ml-1 mb-1">Username</label>
+                    <input type="text" id="username" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Masukkan username">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase ml-1 mb-1">Password</label>
+                    <input type="password" id="password" class="w-full p-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="••••••••">
+                </div>
+                <button onclick="handleLogin()" id="btnLogin" class="w-full btn-primary text-white font-semibold p-3 rounded-xl shadow-md mt-4 flex items-center justify-center gap-2">
+                    <span>Masuk Ke Sistem</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD UTAMA (Hidden by Default) -->
+    <div id="dashboardPage" class="hidden min-h-screen">
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-10">
+            <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="legal-gradient p-2 rounded-lg">
+                        <i data-lucide="shield-check" class="text-white w-5 h-5"></i>
+                    </div>
+                    <span class="font-bold text-lg tracking-tight">YCP System</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div id="userBadge" class="text-right hidden sm:block">
+                        <p id="userName" class="text-sm font-bold leading-none"></p>
+                        <p id="userRole" class="text-[10px] uppercase tracking-widest text-blue-600 font-bold"></p>
+                    </div>
+                    <img id="userFoto" src="" class="w-10 h-10 rounded-full border-2 border-blue-100 object-cover bg-slate-200">
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-5xl mx-auto p-4 space-y-6">
+            <!-- Stats Summary -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-400 text-xs font-bold uppercase mb-1">Perkara Aktif</p>
+                    <h3 class="text-2xl font-bold">12</h3>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-400 text-xs font-bold uppercase mb-1">Surat Masuk</p>
+                    <h3 class="text-2xl font-bold text-blue-600">5</h3>
+                </div>
+            </div>
+
+            <!-- List Perkara -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold flex items-center gap-2">
+                        <i data-lucide="briefcase" class="w-5 h-5 text-blue-600"></i>
+                        Daftar Perkara Saya
+                    </h2>
+                    <button class="text-blue-600 text-sm font-semibold">+ Baru</button>
+                </div>
+
+                <div id="perkaraList" class="grid gap-4">
+                    <!-- Data Perkara akan muncul di sini via JS -->
+                    <div class="animate-pulse bg-white h-32 rounded-2xl border border-slate-200"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Asisten Hukum (Saran) -->
+    <div id="saranModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl space-y-4 animate-slide-up">
+            <div class="flex justify-between items-center">
+                <h3 class="font-bold text-xl flex items-center gap-2 text-blue-700">
+                    <i data-lucide="lightbulb" class="w-6 h-6"></i>
+                    Saran Strategi Hukum
+                </h3>
+                <button onclick="closeSaran()" class="p-2 bg-slate-100 rounded-full"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <div id="isiSaran" class="bg-blue-50 p-4 rounded-2xl border border-blue-100 text-blue-900 leading-relaxed italic">
+                <!-- Teks saran otomatis -->
+            </div>
+            <div class="space-y-2">
+                <p class="text-xs font-bold text-slate-400 uppercase">Checklist Tindakan:</p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-white border border-slate-200 text-xs py-1 px-3 rounded-full flex items-center gap-1">
+                        <i data-lucide="check-circle" class="w-3 h-3 text-green-500"></i> Siapkan Pledoi
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbxZBgD9DoZVpTxVtMlaOXRzq4r4XSFmtlJGh5s_9MC-iFrce6APvdAMRqYazRglz4R5/exec"; // <--- GANTI INI
+        let currentUser = null;
+
+        async function handleLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const btn = document.getElementById('btnLogin');
+
+            btn.disabled = true;
+            btn.innerText = "Memverifikasi...";
+
+            // Memanggil Google Apps Script
+            try {
+                // Catatan: Ini simulasi panggil fungsi GAS. 
+                // Di sistem nyata Anda menggunakan google.script.run untuk GAS, 
+                // tapi karena ini di GitHub Pages, kita pakai fetch (Web App must be Public)
+                const response = await fetch(`${API_URL}?action=login&u=${user}&p=${pass}`);
+                const res = await response.json();
+
+                if(res.success) {
+                    showDashboard(res.user);
+                } else {
+                    alert(res.message);
+                }
+            } catch (e) {
+                // Karena kita belum deploy script lengkap, kita buat simulasi login agar Anda bisa lihat desainnya:
+                if(user === "admin") {
+                    showDashboard({nama: "Notes of OD", role: "DIREKTUR", jabatan: "Ketua Yayasan"});
+                } else {
+                    alert("Gagal koneksi ke server. Pastikan URL Web App benar.");
+                }
+            }
+            btn.disabled = false;
+            btn.innerHTML = `<span>Masuk Ke Sistem</span><i data-lucide="arrow-right" class="w-4 h-4"></i>`;
+            lucide.createIcons();
+        }
+
+        function showDashboard(user) {
+            currentUser = user;
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.remove('hidden');
+            document.getElementById('userName').innerText = user.nama;
+            document.getElementById('userRole').innerText = user.role;
+            if(user.foto) document.getElementById('userFoto').src = user.foto;
+            
+            loadPerkara();
+            lucide.createIcons();
+        }
+
+        function loadPerkara() {
+            const list = document.getElementById('perkaraList');
+            // Contoh data simulasi
+            const data = [
+                {klien: "Sengketa Tanah Bitung", status: "Dakwaan", id: "2026-001", saran: "Segera susun EKSEPSI dalam 7 hari kerja karena ada cacat administrasi sertifikat."},
+                {klien: "PHI - Buruh Pabrik", status: "Mediasi", id: "2026-002", saran: "Pastikan resume mediasi sudah memuat hitungan pesangon sesuai UU Cipta Kerja."}
+            ];
+
+            list.innerHTML = data.map(p => `
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-300 transition-all cursor-pointer group" onclick="openSaran('${p.saran}')">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-[10px] font-bold bg-slate-100 text-slate-500 py-1 px-2 rounded-lg">${p.id}</span>
+                        <span class="text-[10px] font-bold bg-blue-100 text-blue-600 py-1 px-2 rounded-lg uppercase tracking-wider">${p.status}</span>
+                    </div>
+                    <h4 class="font-bold text-slate-900 group-hover:text-blue-600">${p.klien}</h4>
+                    <div class="mt-4 flex items-center justify-between text-slate-400">
+                        <div class="flex items-center gap-1 text-xs">
+                            <i data-lucide="calendar" class="w-3 h-3"></i> 20 Apr 2026
+                        </div>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-blue-500"></i>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openSaran(msg) {
+            document.getElementById('isiSaran').innerText = msg;
+            document.getElementById('saranModal').classList.remove('hidden');
+            document.getElementById('saranModal').classList.add('flex');
+        }
+
+        function closeSaran() {
+            document.getElementById('saranModal').classList.add('hidden');
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>
