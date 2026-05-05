@@ -11,37 +11,31 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #022c22; overflow: hidden; }
         .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2.5rem; }
-        
-        /* Glow Effect untuk Logo */
-        .logo-glow { filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.3)); }
-
-        /* Splash & Animations */
+        .logo-glow { filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.35)); }
         #splash { transition: all 0.8s ease-in-out; }
         .floating { animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-        
         .hidden-login { opacity: 0; transform: translateY(30px); pointer-events: none; transition: all 0.8s ease; }
         .show-login { opacity: 1 !important; transform: translateY(0) !important; pointer-events: auto !important; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
+<body class="flex items-center justify-center min-h-screen p-6 text-white">
 
     <div id="splash" class="fixed inset-0 z-50 bg-[#022c22] flex flex-col items-center justify-center text-center">
         <div class="w-64 h-64 floating mb-8">
-            <img src="Karakter.png" class="w-full h-full object-contain" alt="Karakter Si Cakra">
+            <img src="Karakter.png" class="w-full h-full object-contain" alt="Si Cakra">
         </div>
-        <div id="greeting" class="text-emerald-400 text-xl font-bold tracking-widest px-4 h-8 transition-opacity duration-500 opacity-0">
-            </div>
+        <div id="greeting" class="text-emerald-400 text-xl font-bold tracking-widest px-4 h-8 transition-opacity duration-500 opacity-0"></div>
     </div>
 
     <div id="loginPage" class="w-full max-w-[420px] hidden-login relative z-10">
-        <div class="glass-card p-10 pt-12 text-white text-center">
+        <div class="glass-card p-10 pt-12 text-center">
             <div class="w-36 h-36 mx-auto mb-6">
                 <img src="logo Si Cakra.png" class="w-full h-full object-contain logo-glow" alt="Logo SI CAKRA">
             </div>
 
-            <h2 class="text-2xl font-bold mb-1">OTENTIKASI AKSES</h2>
-            <p class="text-emerald-400/50 text-[9px] tracking-[0.4em] uppercase mb-10 font-semibold">Legal Management System</p>
+            <h2 class="text-2xl font-bold mb-1 tracking-tight">OTENTIKASI AKSES</h2>
+            <p class="text-emerald-400/50 text-[9px] tracking-[0.4em] uppercase mb-10 font-bold">Legal Management System</p>
 
             <div class="space-y-4 text-left">
                 <div class="relative">
@@ -52,12 +46,12 @@
                     <i data-lucide="shield-lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500/30"></i>
                     <input type="password" id="p" placeholder="Password" class="w-full bg-white/5 border border-white/10 pl-12 pr-4 py-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-sm">
                 </div>
-                <button onclick="handleLogin()" id="btn" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-700 py-4 rounded-2xl font-bold mt-4 shadow-lg shadow-emerald-950/20 active:scale-95 transition-all text-sm">
+                <button onclick="handleLogin()" id="btn" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-700 py-4 rounded-2xl font-bold mt-4 shadow-xl active:scale-95 transition-all text-sm">
                     MASUK KE DASHBOARD
                 </button>
             </div>
             
-            <p class="mt-12 text-[10px] text-white/20 tracking-widest uppercase font-bold">
+            <p class="mt-12 text-[9px] text-white/20 tracking-[0.2em] uppercase font-bold">
                 Yayasan Cakra Proletariat Bitung Indonesia
             </p>
         </div>
@@ -66,10 +60,9 @@
     <script>
         lucide.createIcons();
 
-        // Konfigurasi Sapaan Splash
         const sapaanScript = [
             { teks: "Halo, rekan seperjuangan!", delay: 1000 },
-            { teks: "Siap tertibkan administrasi hari ini?", delay: 1800 },
+            { teks: "Siap tertibkan administrasi?", delay: 1500 },
             { teks: "Otentikasi akses dulu ya...", delay: 2000 }
         ];
 
@@ -98,29 +91,26 @@
             setTimeout(() => {
                 const splash = document.getElementById('splash');
                 splash.style.opacity = '0';
-                splash.style.transform = 'scale(1.1)';
                 setTimeout(() => { 
                     splash.classList.add('hidden');
                     document.getElementById('loginPage').classList.add('show-login');
                 }, 800);
-            }, 1000);
+            }, 800);
         }
 
-        window.onload = () => { setTimeout(showNextGreeting, 800); };
+        window.onload = () => { setTimeout(showNextGreeting, 500); };
 
-        // Logika Login
-        const API = "https://script.google.com/macros/s/AKfycbygUuARStQlMm4_U0QgmxpdJeGw42MgsSixE0n1hkf2UynB5owVsIFQw4t1RBAWGv7s/exec"; // GANTI DENGAN URL DEPLOYMENT ANDA
+        const API = "https://script.google.com/macros/s/AKfycbwSIMUU6dVD7mFLZvRrfknWYmL4EW7PIkp0IOgw_a1zLbhwDiQs1zdYChIJP1Exxi86/exec"; // Ganti dengan URL Deploy Anda
 
         async function handleLogin() {
             const u = document.getElementById('u').value;
             const p = document.getElementById('p').value;
             const btn = document.getElementById('btn');
 
-            if(!u || !p) return alert("Username dan Password wajib diisi!");
+            if(!u || !p) return alert("Lengkapi data login!");
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="flex items-center justify-center gap-2"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> MEMVERIFIKASI...</span>`;
-            lucide.createIcons();
+            btn.innerHTML = `<span class="flex items-center justify-center gap-2 animate-pulse">MEMVERIFIKASI...</span>`;
 
             try {
                 const res = await fetch(`${API}?action=login&u=${u}&p=${p}`);
@@ -128,13 +118,13 @@
 
                 if(data.success) {
                     localStorage.setItem("user_cakra", JSON.stringify(data.user));
-                    window.location.href = "dashboard.html"; // Pastikan file dashboard.html ada
+                    window.location.href = "dashboard.html"; // Pastikan file dashboard sudah ada
                 } else {
-                    alert("Akses Ditolak: " + data.message);
+                    alert(data.message);
                     resetBtn();
                 }
             } catch (e) {
-                alert("Kesalahan koneksi ke server!");
+                alert("Kesalahan koneksi ke server! Pastikan URL Apps Script benar.");
                 resetBtn();
             }
         }
