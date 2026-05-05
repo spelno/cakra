@@ -37,10 +37,12 @@
             <h2 class="text-2xl font-bold mb-1">OTENTIKASI AKSES</h2>
             <p class="text-emerald-400/50 text-[9px] tracking-[0.4em] uppercase mb-10 font-bold">Legal Management System</p>
 
-            <div class="space-y-4 text-left text-white">
-                <input type="text" id="u" placeholder="Username" class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl outline-none focus:border-emerald-500 transition-all">
-                <input type="password" id="p" placeholder="Password" class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl outline-none focus:border-emerald-500 transition-all">
-                <button onclick="handleLogin()" id="btn" class="w-full bg-emerald-600 py-4 rounded-2xl font-bold mt-4 shadow-xl active:scale-95 transition-all">MASUK KE SISTEM</button>
+            <div class="space-y-4 text-left">
+                <input type="text" id="u" placeholder="Username" class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl outline-none focus:border-emerald-500 transition-all text-sm">
+                <input type="password" id="p" placeholder="Password" class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl outline-none focus:border-emerald-500 transition-all text-sm">
+                <button onclick="handleLogin()" id="btn" class="w-full bg-emerald-600 py-4 rounded-2xl font-bold mt-4 shadow-xl active:scale-95 transition-all text-sm text-white">
+                    MASUK KE SISTEM
+                </button>
             </div>
             
             <p class="mt-12 text-[9px] text-white/20 tracking-widest uppercase font-bold">
@@ -52,56 +54,52 @@
     <script>
         lucide.createIcons();
 
-        // Alur Sapaan Splash Screen
-        const scriptSapaan = ["Halo, rekan seperjuangan!", "Siap tertibkan administrasi?", "Otentikasi akses dulu ya..."];
+        // Alur Splash Sapaan
+        const sapaan = ["Halo, rekan!", "Siap bertugas?", "Otentikasi dulu ya..."];
         let sIdx = 0;
 
-        function showGreetings() {
-            if (sIdx < scriptSapaan.length) {
-                const g = document.getElementById('greeting');
-                g.innerText = scriptSapaan[sIdx];
+        function runSplash() {
+            const g = document.getElementById('greeting');
+            if (sIdx < sapaan.length) {
+                g.innerText = sapaan[sIdx];
                 g.style.opacity = "1";
                 setTimeout(() => {
                     g.style.opacity = "0";
                     sIdx++;
-                    setTimeout(showGreetings, 500);
+                    setTimeout(runSplash, 500);
                 }, 1500);
             } else {
-                const splash = document.getElementById('splash');
-                splash.style.opacity = "0";
+                document.getElementById('splash').style.opacity = "0";
                 setTimeout(() => {
-                    splash.classList.add('hidden');
+                    document.getElementById('splash').classList.add('hidden');
                     document.getElementById('loginPage').classList.add('show-login');
                 }, 800);
             }
         }
-        window.onload = showGreetings;
+        window.onload = runSplash;
 
-        // Logika Login & Redirect Berdasarkan Role
-        const API_URL = "https://script.google.com/macros/s/AKfycbwPf0s0gFo6gl9VvfwX6KWXESAS0DyHucCPDLsbG_rmtd91YAJ4oNw_NgW0KDT0_QLa/exec"; 
+        // Logika Login & Redirect Berdasarkan File di GitHub
+        const API = "https://script.google.com/macros/s/AKfycbxgjAIelUQlMgEdgxu5uP7kXRCoIrrFAeJBj0_aJwUKxG9VMW-KC10qumY4Vx7DEO1z/exec"; 
 
         async function handleLogin() {
-            const u = document.getElementById('u').value;
-            const p = document.getElementById('p').value;
-            const btn = document.getElementById('btn');
-
-            if(!u || !p) return alert("Harap isi username dan password!");
+            const u = document.getElementById('u').value, p = document.getElementById('p').value, btn = document.getElementById('btn');
+            if(!u || !p) return alert("Isi data login!");
 
             btn.disabled = true;
             btn.innerText = "MEMVERIFIKASI...";
 
             try {
-                const response = await fetch(`${API_URL}?action=login&u=${u}&p=${p}`);
-                const data = await response.json();
+                const res = await fetch(`${API}?action=login&u=${u}&p=${p}`);
+                const data = await res.json();
 
                 if(data.success) {
                     localStorage.setItem("user_cakra", JSON.stringify(data.user));
-                    
-                    // Redirect otomatis sesuai file di repository
                     const role = data.user.role.toLowerCase();
+                    
+                    // Redirect ke file yang ada di repository Anda
                     if (role === "admin" || role === "direktur") {
                         window.location.href = "direktur.html";
-                    } else if (role === "staf" || role === "user") {
+                    } else if (role === "user" || role === "staf") {
                         window.location.href = "anggota.html";
                     } else {
                         window.location.href = "guest.html";
@@ -110,8 +108,8 @@
                     alert(data.message);
                     resetBtn();
                 }
-            } catch (err) {
-                alert("Gagal terhubung ke server. Periksa URL Deployment Anda.");
+            } catch (e) {
+                alert("Kesalahan koneksi! Pastikan URL Apps Script benar.");
                 resetBtn();
             }
         }
