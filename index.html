@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SI CAKRA | Sistem Informasi Penomoran Surat</title>
+    <title>Login | SI CAKRA</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -28,11 +28,12 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .si-cakra-floating {
-            animation: float 4s ease-in-out infinite;
+        /* Animasi Floating Karakter Cakra */
+        .karakter-cakra-anim {
+            animation: floatKarakter 4s ease-in-out infinite;
         }
 
-        @keyframes float {
+        @keyframes floatKarakter {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(2deg); }
         }
@@ -64,25 +65,23 @@
 <body class="p-6">
 
     <div class="w-full max-w-[460px] relative">
-        <div class="absolute -top-36 left-1/2 -translate-x-1/2 w-56 h-56 si-cakra-floating z-20">
-            <img src="SiCakra.png" id="imgCakra" class="w-full h-full object-contain drop-shadow-2xl" alt="SI CAKRA">
+        <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-64 h-64 karakter-cakra-anim z-20">
+            <img src="karakter.png" id="siCakraImage" class="w-full h-full object-contain drop-shadow-2xl" alt="Karakter SI CAKRA">
         </div>
 
-        <div class="glass-card p-10 pt-24 text-white relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-30"></div>
-
-            <div class="text-center mb-10">
+        <div class="glass-card p-10 pt-28 text-white relative overflow-hidden">
+            <div class="text-center mb-8">
                 <h1 class="text-3xl font-extrabold tracking-tight">SI CAKRA</h1>
                 <p class="text-emerald-400/60 text-[10px] uppercase tracking-[0.4em] font-bold mt-1">Sistem Informasi Penomoran Surat</p>
             </div>
 
             <div id="bubble" class="bg-emerald-950/40 border border-emerald-500/20 p-4 rounded-2xl mb-8 text-sm text-center italic text-emerald-100">
-                "Halo! Aku SI CAKRA. Masukkan aksesmu untuk masuk ke sistem."
+                "Selamat datang! Aku SI CAKRA. Masukkan aksesmu untuk masuk ke dashboard."
             </div>
 
             <div class="space-y-6">
                 <div>
-                    <label class="block text-[11px] font-bold text-emerald-400 uppercase tracking-widest ml-1 mb-2">Identity</label>
+                    <label class="block text-[11px] font-bold text-emerald-400 uppercase tracking-widest ml-1 mb-2">User Identity</label>
                     <div class="relative">
                         <i data-lucide="user" class="absolute left-4 top-4 w-5 h-5 text-emerald-500/40"></i>
                         <input type="text" id="username" placeholder="Username" 
@@ -91,7 +90,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-emerald-400 uppercase tracking-widest ml-1 mb-2">Secret Code</label>
+                    <label class="block text-[11px] font-bold text-emerald-400 uppercase tracking-widest ml-1 mb-2">Access Key</label>
                     <div class="relative">
                         <i data-lucide="key-round" class="absolute left-4 top-4 w-5 h-5 text-emerald-500/40"></i>
                         <input type="password" id="password" placeholder="••••••••" 
@@ -100,14 +99,14 @@
                 </div>
 
                 <button onclick="handleLogin()" id="btnLogin" 
-                    class="w-full btn-cakra text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 mt-8">
-                    <span>OTENTIKASI AKSES</span>
-                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    class="w-full btn-cakra text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 mt-4">
+                    <span>MASUK KE SISTEM</span>
+                    <i data-lucide="log-in" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <div class="mt-12 text-center border-t border-white/5 pt-6">
-                <p class="text-[10px] text-white/20 uppercase tracking-[0.5em] font-medium">Official Internal System</p>
+            <div class="mt-10 text-center border-t border-white/5 pt-6">
+                <p class="text-[10px] text-white/20 uppercase tracking-[0.5em] font-medium">Official Access Point</p>
                 <p class="text-xs font-bold text-emerald-500/50 mt-1">YAYASAN CAKRA PROLETARIAT</p>
             </div>
         </div>
@@ -116,7 +115,7 @@
     <script>
         lucide.createIcons();
 
-        // Ganti dengan URL Deployment Web App Anda
+        // Gunakan URL Deployment Google Apps Script Anda
         const API_URL = "https://script.google.com/macros/s/AKfycbyEB6BcojpLM0MqQonBzjx4m8bwllz_e9G67nO0R9Vhn0J_y8tm52ckGIrXgX8fuUbh/exec";
 
         async function handleLogin() {
@@ -126,14 +125,13 @@
             const btn = document.getElementById('btnLogin');
 
             if(!u || !p) {
-                bubble.innerText = "😐 Masukkan username dan password dulu ya!";
+                bubble.innerText = "😐 Lengkapi data loginmu dulu ya!";
                 return;
             }
 
-            // Loading State
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> <span>MEMVERIFIKASI...</span>`;
-            bubble.innerText = "⏳ Sebentar, aku cek dulu datanya ke server...";
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> <span>MENGOTENTIKASI...</span>`;
+            bubble.innerText = "⏳ Sebentar, aku cek dulu izin aksesmu...";
             lucide.createIcons();
 
             try {
@@ -141,27 +139,27 @@
                 const res = await response.json();
 
                 if (res.success) {
-                    bubble.innerText = `🎉 Halo ${res.user.nama}! Akses diterima. Tunggu sebentar...`;
+                    bubble.innerText = `🎉 Halo ${res.user.nama}! Data cocok. Mengalihkan...`;
                     localStorage.setItem("ycp_user", JSON.stringify(res.user));
                     
                     setTimeout(() => {
-                        // Redirect Berdasarkan Role dari Template
+                        // Pengalihan berdasarkan role sesuai template dashboard
                         if (res.user.role === "DIREKTUR" || res.user.role === "ADMIN") {
                             window.location.href = "dashboard.html";
                         } else {
                             window.location.href = "anggota.html";
                         }
-                    }, 1500);
+                    }, 1200);
                 } else {
-                    bubble.innerText = "❌ Maaf, datanya salah. Coba periksa lagi username/password-nya.";
+                    bubble.innerText = "❌ Akses ditolak. Pastikan username dan password benar.";
                     btn.disabled = false;
-                    btn.innerHTML = `<span>OTENTIKASI AKSES</span> <i data-lucide="shield-check" class="w-5 h-5"></i>`;
+                    btn.innerHTML = `<span>MASUK KE SISTEM</span> <i data-lucide="log-in" class="w-5 h-5"></i>`;
                     lucide.createIcons();
                 }
             } catch (err) {
-                bubble.innerText = "⚠️ Koneksi bermasalah. Pastikan internetmu aktif!";
+                bubble.innerText = "⚠️ Gangguan koneksi. Coba lagi nanti!";
                 btn.disabled = false;
-                btn.innerHTML = `<span>OTENTIKASI AKSES</span> <i data-lucide="shield-check" class="w-5 h-5"></i>`;
+                btn.innerHTML = `<span>MASUK KE SISTEM</span> <i data-lucide="log-in" class="w-5 h-5"></i>`;
                 lucide.createIcons();
             }
         }
