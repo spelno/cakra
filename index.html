@@ -9,17 +9,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #022c22; overflow: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #022c22; overflow: hidden; color: white; }
         .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2.5rem; }
-        .logo-glow { filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.35)); }
+        .logo-glow { filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.4)); }
         #splash { transition: all 0.8s ease-in-out; }
         .floating { animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-        .hidden-login { opacity: 0; transform: translateY(30px); pointer-events: none; transition: all 0.8s ease; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .hidden-login { opacity: 0; transform: translateY(20px); pointer-events: none; transition: all 0.8s ease; }
         .show-login { opacity: 1 !important; transform: translateY(0) !important; pointer-events: auto !important; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6 text-white">
+<body class="flex items-center justify-center min-h-screen p-6">
 
     <div id="splash" class="fixed inset-0 z-50 bg-[#022c22] flex flex-col items-center justify-center text-center">
         <div class="w-64 h-64 floating mb-8">
@@ -31,27 +31,19 @@
     <div id="loginPage" class="w-full max-w-[420px] hidden-login relative z-10">
         <div class="glass-card p-10 pt-12 text-center">
             <div class="w-36 h-36 mx-auto mb-6">
-                <img src="logo Si Cakra.png" class="w-full h-full object-contain logo-glow" alt="Logo SI CAKRA">
+                <img src="logo Si Cakra.png" class="w-full h-full object-contain logo-glow" alt="Logo">
             </div>
 
-            <h2 class="text-2xl font-bold mb-1 tracking-tight">OTENTIKASI AKSES</h2>
+            <h2 class="text-2xl font-bold mb-1">OTENTIKASI AKSES</h2>
             <p class="text-emerald-400/50 text-[9px] tracking-[0.4em] uppercase mb-10 font-bold">Legal Management System</p>
 
-            <div class="space-y-4 text-left">
-                <div class="relative">
-                    <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500/30"></i>
-                    <input type="text" id="u" placeholder="Username" class="w-full bg-white/5 border border-white/10 pl-12 pr-4 py-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-sm">
-                </div>
-                <div class="relative">
-                    <i data-lucide="shield-lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500/30"></i>
-                    <input type="password" id="p" placeholder="Password" class="w-full bg-white/5 border border-white/10 pl-12 pr-4 py-4 rounded-2xl outline-none focus:border-emerald-500/50 transition-all text-sm">
-                </div>
-                <button onclick="handleLogin()" id="btn" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-700 py-4 rounded-2xl font-bold mt-4 shadow-xl active:scale-95 transition-all text-sm">
-                    MASUK KE DASHBOARD
-                </button>
+            <div class="space-y-4 text-left text-white">
+                <input type="text" id="u" placeholder="Username" class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl outline-none focus:border-emerald-500 transition-all">
+                <input type="password" id="p" placeholder="Password" class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl outline-none focus:border-emerald-500 transition-all">
+                <button onclick="handleLogin()" id="btn" class="w-full bg-emerald-600 py-4 rounded-2xl font-bold mt-4 shadow-xl active:scale-95 transition-all">MASUK KE SISTEM</button>
             </div>
             
-            <p class="mt-12 text-[9px] text-white/20 tracking-[0.2em] uppercase font-bold">
+            <p class="mt-12 text-[9px] text-white/20 tracking-widest uppercase font-bold">
                 Yayasan Cakra Proletariat Bitung Indonesia
             </p>
         </div>
@@ -60,71 +52,66 @@
     <script>
         lucide.createIcons();
 
-        const sapaanScript = [
-            { teks: "Halo, rekan seperjuangan!", delay: 1000 },
-            { teks: "Siap tertibkan administrasi?", delay: 1500 },
-            { teks: "Otentikasi akses dulu ya...", delay: 2000 }
-        ];
+        // Alur Sapaan Splash Screen
+        const scriptSapaan = ["Halo, rekan seperjuangan!", "Siap tertibkan administrasi?", "Otentikasi akses dulu ya..."];
+        let sIdx = 0;
 
-        const greetingElement = document.getElementById('greeting');
-        let scriptIndex = 0;
-
-        function showNextGreeting() {
-            if (scriptIndex < sapaanScript.length) {
-                const item = sapaanScript[scriptIndex];
-                greetingElement.innerText = item.teks;
-                greetingElement.style.opacity = '1';
-                
+        function showGreetings() {
+            if (sIdx < scriptSapaan.length) {
+                const g = document.getElementById('greeting');
+                g.innerText = scriptSapaan[sIdx];
+                g.style.opacity = "1";
                 setTimeout(() => {
-                    if (scriptIndex < sapaanScript.length - 1) {
-                        greetingElement.style.opacity = '0';
-                        scriptIndex++;
-                        setTimeout(showNextGreeting, 500); 
-                    } else {
-                        startLoginTransition();
-                    }
-                }, item.delay);
-            }
-        }
-
-        function startLoginTransition() {
-            setTimeout(() => {
+                    g.style.opacity = "0";
+                    sIdx++;
+                    setTimeout(showGreetings, 500);
+                }, 1500);
+            } else {
                 const splash = document.getElementById('splash');
-                splash.style.opacity = '0';
-                setTimeout(() => { 
+                splash.style.opacity = "0";
+                setTimeout(() => {
                     splash.classList.add('hidden');
                     document.getElementById('loginPage').classList.add('show-login');
                 }, 800);
-            }, 800);
+            }
         }
+        window.onload = showGreetings;
 
-        window.onload = () => { setTimeout(showNextGreeting, 500); };
-
-        const API = "https://script.google.com/macros/s/AKfycbwSIMUU6dVD7mFLZvRrfknWYmL4EW7PIkp0IOgw_a1zLbhwDiQs1zdYChIJP1Exxi86/exec"; // Ganti dengan URL Deploy Anda
+        // Logika Login & Redirect Berdasarkan Role
+        const API_URL = "https://script.google.com/macros/s/AKfycbwPf0s0gFo6gl9VvfwX6KWXESAS0DyHucCPDLsbG_rmtd91YAJ4oNw_NgW0KDT0_QLa/exec"; 
 
         async function handleLogin() {
             const u = document.getElementById('u').value;
             const p = document.getElementById('p').value;
             const btn = document.getElementById('btn');
 
-            if(!u || !p) return alert("Lengkapi data login!");
+            if(!u || !p) return alert("Harap isi username dan password!");
 
             btn.disabled = true;
-            btn.innerHTML = `<span class="flex items-center justify-center gap-2 animate-pulse">MEMVERIFIKASI...</span>`;
+            btn.innerText = "MEMVERIFIKASI...";
 
             try {
-                const res = await fetch(`${API}?action=login&u=${u}&p=${p}`);
-                const data = await res.json();
+                const response = await fetch(`${API_URL}?action=login&u=${u}&p=${p}`);
+                const data = await response.json();
 
                 if(data.success) {
                     localStorage.setItem("user_cakra", JSON.stringify(data.user));
-                    window.location.href = "dashboard.html"; // Pastikan file dashboard sudah ada
+                    
+                    // Redirect otomatis sesuai file di repository
+                    const role = data.user.role.toLowerCase();
+                    if (role === "admin" || role === "direktur") {
+                        window.location.href = "direktur.html";
+                    } else if (role === "staf" || role === "user") {
+                        window.location.href = "anggota.html";
+                    } else {
+                        window.location.href = "guest.html";
+                    }
                 } else {
                     alert(data.message);
                     resetBtn();
                 }
-            } catch (e) {
-                alert("Kesalahan koneksi ke server! Pastikan URL Apps Script benar.");
+            } catch (err) {
+                alert("Gagal terhubung ke server. Periksa URL Deployment Anda.");
                 resetBtn();
             }
         }
@@ -132,7 +119,7 @@
         function resetBtn() {
             const btn = document.getElementById('btn');
             btn.disabled = false;
-            btn.innerText = "MASUK KE DASHBOARD";
+            btn.innerText = "MASUK KE SISTEM";
         }
     </script>
 </body>
