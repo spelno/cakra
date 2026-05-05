@@ -3,184 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Otentikasi | SI CAKRA</title>
-    
+    <title>Sistem SI CAKRA | Yayasan Cakra Proletariat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: #022c22; /* Hijau Tua Solid untuk kesan formal */
-            background-image: radial-gradient(circle at 50% -20%, #064e3b 0%, #022c22 80%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        .main-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 2.5rem;
-            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.7);
-        }
-
-        /* Perbaikan Posisi Karakter agar Tidak Melayang/Terpotong */
-        .karakter-container {
-            position: absolute;
-            top: -140px; /* Disesuaikan agar kepala hingga badan terlihat */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 220px;
-            height: 220px;
-            z-index: 30;
-        }
-
-        .karakter-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.5));
-            animation: subtleFloat 5s ease-in-out infinite;
-        }
-
-        @keyframes subtleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .input-field {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .input-field:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: #10b981;
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
-        }
-
-        .btn-auth {
-            background: linear-gradient(135deg, #10b981 0%, #065f46 100%);
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .btn-auth:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #022c22; overflow: hidden; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2.5rem; }
+        
+        /* Animasi Splash */
+        #splash { transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .floating { animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        
+        .hidden-login { opacity: 0; transform: translateY(20px); pointer-events: none; transition: all 0.6s ease; }
+        .show-login { opacity: 1 !important; transform: translateY(0) !important; pointer-events: auto !important; }
     </style>
 </head>
-<body class="p-4">
+<body class="flex items-center justify-center min-h-screen p-6">
 
-    <div class="w-full max-w-[420px] relative">
-        
-        <div class="karakter-container text-center">
-            <img src="Karakter.png" class="karakter-img" alt="SI CAKRA">
+    <div id="splash" class="fixed inset-0 z-50 bg-[#022c22] flex flex-col items-center justify-center">
+        <div class="w-64 h-64 floating mb-6">
+            <img src="karakter.png" class="w-full h-full object-contain" alt="Si Cakra">
         </div>
+        <div id="greeting" class="text-emerald-400 text-xl font-bold tracking-widest opacity-0 transition-opacity duration-1000">
+            SELAMAT DATANG DI SI CAKRA
+        </div>
+    </div>
 
-        <div class="main-card p-10 pt-24 relative overflow-hidden">
-            
-            <div class="text-center mb-10">
-                <h1 class="text-3xl font-extrabold text-white tracking-tighter">SI CAKRA</h1>
-                <div class="h-1 w-12 bg-emerald-500 mx-auto mt-2 rounded-full"></div>
-                <p class="text-emerald-400/50 text-[9px] uppercase tracking-[0.5em] font-bold mt-3">Legal Management System</p>
+    <div id="loginPage" class="w-full max-w-[420px] hidden-login relative z-10">
+        <div class="glass-card p-10 pt-16 text-white text-center">
+            <div class="w-32 h-32 mx-auto mb-8">
+                <img src="logo Si Cakra.png" class="w-full h-full object-contain" alt="Logo SI CAKRA">
             </div>
 
-            <div id="statusBubble" class="bg-emerald-950/30 border border-emerald-500/20 p-4 rounded-2xl mb-8 text-center">
-                <p class="text-xs text-emerald-100/80 leading-relaxed font-medium">
-                    Silakan masukkan kredensial untuk mengakses <br>
-                    <span class="text-emerald-400 italic">Dashboard Yayasan Cakra Proletariat</span>
-                </p>
-            </div>
+            <h2 class="text-2xl font-bold mb-2">OTENTIKASI AKSES</h2>
+            <p class="text-emerald-400/50 text-[10px] tracking-[0.4em] uppercase mb-10">Legal Management System</p>
 
-            <div class="space-y-5">
-                <div>
-                    <label class="text-[10px] font-bold text-emerald-500/60 uppercase tracking-widest ml-1">Identity</label>
-                    <div class="relative mt-1">
-                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500/30"></i>
-                        <input type="text" id="username" placeholder="Username" 
-                            class="w-full input-field pl-11 pr-4 py-4 rounded-xl text-white outline-none text-sm">
-                    </div>
+            <div class="space-y-5 text-left">
+                <div class="relative">
+                    <i data-lucide="user" class="absolute left-4 top-4 w-5 h-5 text-emerald-500/30"></i>
+                    <input type="text" id="u" placeholder="Username" class="w-full bg-white/5 border border-white/10 pl-12 pr-4 py-4 rounded-2xl outline-none focus:border-emerald-500 transition-all">
                 </div>
-
-                <div>
-                    <label class="text-[10px] font-bold text-emerald-500/60 uppercase tracking-widest ml-1">Security Key</label>
-                    <div class="relative mt-1">
-                        <i data-lucide="shield-lock" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500/30"></i>
-                        <input type="password" id="password" placeholder="••••••••" 
-                            class="w-full input-field pl-11 pr-4 py-4 rounded-xl text-white outline-none text-sm">
-                    </div>
+                <div class="relative">
+                    <i data-lucide="shield-lock" class="absolute left-4 top-4 w-5 h-5 text-emerald-500/30"></i>
+                    <input type="password" id="p" placeholder="Password" class="w-full bg-white/5 border border-white/10 pl-12 pr-4 py-4 rounded-2xl outline-none focus:border-emerald-500 transition-all">
                 </div>
-
-                <button onclick="handleLogin()" id="btnSubmit" 
-                    class="w-full btn-auth text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3 mt-4 text-sm">
-                    <span>Mulai Sesi</span>
-                    <i data-lucide="arrow-right-circle" class="w-5 h-5"></i>
+                <button onclick="handleLogin()" id="btn" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-700 py-4 rounded-2xl font-bold mt-4 hover:scale-[1.02] transition-transform">
+                    MASUK KE DASHBOARD
                 </button>
             </div>
-
-            <div class="mt-10 pt-6 border-t border-white/5 text-center">
-                <p class="text-[10px] text-white/20 font-medium tracking-widest">YAYASAN CAKRA PROLETARIAT</p>
-            </div>
+            
+            <p class="mt-10 text-[10px] text-white/20 tracking-widest uppercase">Yayasan Cakra Proletariat</p>
         </div>
     </div>
 
     <script>
         lucide.createIcons();
 
-        const API_URL = "https://script.google.com/macros/s/AKfycbzJQ3IOh1luGmUZpMwk2xWqusobMf6AwwPgkzejXwwninByd7WFUMPjPz35AJca27Di/exec";
+        // Alur Splash ke Login
+        window.onload = () => {
+            setTimeout(() => { document.getElementById('greeting').style.opacity = '1'; }, 500);
+            setTimeout(() => {
+                const splash = document.getElementById('splash');
+                splash.style.opacity = '0';
+                splash.style.transform = 'scale(1.1)';
+                setTimeout(() => { 
+                    splash.classList.add('hidden');
+                    document.getElementById('loginPage').classList.add('show-login');
+                }, 800);
+            }, 3000);
+        };
+
+        const API = "https://script.google.com/macros/s/AKfycbyEB6BcojpLM0MqQonBzjx4m8bwllz_e9G67nO0R9Vhn0J_y8tm52ckGIrXgX8fuUbh/exec"; // Masukkan URL .exec Anda di sini
 
         async function handleLogin() {
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            const msg = document.getElementById('statusBubble');
-            const btn = document.getElementById('btnSubmit');
+            const u = document.getElementById('u').value;
+            const p = document.getElementById('p').value;
+            const btn = document.getElementById('btn');
 
-            if(!u || !p) {
-                msg.innerHTML = `<p class="text-xs text-orange-400">Harap lengkapi identitas dan kunci keamanan.</p>`;
-                return;
-            }
+            if(!u || !p) return alert("Lengkapi data!");
 
             btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> <span>VERIFIKASI...</span>`;
-            msg.innerHTML = `<p class="text-xs text-emerald-400">Menghubungkan ke server pusat...</p>`;
-            lucide.createIcons();
+            btn.innerText = "MEMVERIFIKASI...";
 
             try {
-                const response = await fetch(`${API_URL}?action=login&u=${u}&p=${p}`);
-                const res = await response.json();
+                const res = await fetch(`${API}?action=login&u=${u}&p=${p}`);
+                const data = await res.json();
 
-                if (res.success) {
-                    msg.innerHTML = `<p class="text-xs text-emerald-400 font-bold italic">Akses Diterima. Selamat bekerja, ${res.user.nama}.</p>`;
-                    localStorage.setItem("ycp_user", JSON.stringify(res.user));
-                    
-                    setTimeout(() => {
-                        window.location.href = (res.user.role === "DIREKTUR" || res.user.role === "ADMIN") ? "dashboard.html" : "anggota.html";
-                    }, 1000);
+                if(data.success) {
+                    localStorage.setItem("user_cakra", JSON.stringify(data.user));
+                    window.location.href = "dashboard.html"; // Mengarah ke template dashboard
                 } else {
-                    msg.innerHTML = `<p class="text-xs text-red-400">Kredensial tidak valid. Silakan coba lagi.</p>`;
-                    resetBtn(btn);
+                    alert("Akses Ditolak!");
+                    btn.disabled = false;
+                    btn.innerText = "MASUK KE DASHBOARD";
                 }
-            } catch (err) {
-                msg.innerHTML = `<p class="text-xs text-red-400">Gagal terhubung ke server (CORS/Network).</p>`;
-                resetBtn(btn);
+            } catch (e) {
+                alert("Gangguan Server!");
+                btn.disabled = false;
             }
-        }
-
-        function resetBtn(btn) {
-            btn.disabled = false;
-            btn.innerHTML = `<span>Mulai Sesi</span> <i data-lucide="arrow-right-circle" class="w-5 h-5"></i>`;
-            lucide.createIcons();
         }
     </script>
 </body>
