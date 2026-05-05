@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Internal - Cakra Proletariat</title>
+    <title>YCP - Secure Gateway Portal</title>
     
-    <!-- Link External (Membutuhkan Internet) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -13,141 +12,158 @@
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: #0f172a;
-            overflow: hidden;
-            color: white;
+            background: #090d16;
+            overflow-x: hidden;
         }
 
-        /* Dekorasi Animasi Latar Belakang */
-        .background-animate {
+        /* Background Glow Orbs */
+        .glow-bg {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1e3a8a 0%, #0f172a 100%);
-            z-index: -1;
-        }
-
-        .orb {
-            position: absolute;
-            width: 400px; height: 400px;
-            background: rgba(37, 99, 235, 0.15);
-            filter: blur(80px);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
             border-radius: 50%;
-            animation: float 15s infinite alternate;
+            z-index: -1;
+            filter: blur(60px);
         }
 
-        @keyframes float {
-            from { transform: translate(-10%, -10%); }
-            to { transform: translate(30%, 30%); }
-        }
-
+        /* Efek Kaca Glassmorphism */
         .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .input-field {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* Input Glass Styling */
+        .input-glass {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-glass:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.25);
+        }
+
+        /* Button Glow effect */
+        .btn-glow {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.5);
             transition: all 0.3s ease;
         }
 
-        .input-field:focus {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(37, 99, 235, 0.6);
+        }
+
+        .btn-glow:active {
+            transform: translateY(0);
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6">
+<body class="min-h-screen flex items-center justify-center p-4 relative">
 
-    <div class="background-animate">
-        <div class="orb"></div>
-    </div>
+    <div class="glow-bg top-[-10%] right-[-10%]"></div>
+    <div class="glow-bg bottom-[-20%] left-[-10%]"></div>
 
-    <!-- MAIN LOGIN CARD -->
-    <div class="w-full max-w-[420px] glass-card rounded-[3rem] p-10 relative overflow-hidden">
+    <div class="w-full max-w-[420px] glass-card rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden">
         
-        <!-- Header Section -->
-        <div class="text-center mb-10">
-            <div class="inline-flex p-4 rounded-3xl bg-blue-600/20 border border-blue-500/30 mb-6 shadow-inner">
-                <i data-lucide="scale" class="w-10 h-10 text-blue-400"></i>
+        <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
+
+        <div class="text-center mb-8">
+            <div class="inline-flex p-4 rounded-2xl bg-blue-600/10 border border-blue-500/20 mb-4 shadow-inner">
+                <i data-lucide="scale" class="w-8 h-8 text-blue-400"></i>
             </div>
-            <h1 class="text-3xl font-bold tracking-tight text-white">Cakra Proletariat</h1>
-            <p class="text-blue-300/40 text-[10px] uppercase tracking-[0.3em] mt-2 font-bold italic">Legal Management System</p>
+            <h1 class="text-2xl font-bold text-white tracking-tight">Cakra Proletariat</h1>
+            <p class="text-blue-300/40 text-[10px] uppercase tracking-[0.25em] mt-1.5 font-bold">Internal Access Only</p>
         </div>
 
-        <!-- Form Section -->
-        <div class="space-y-6">
-            <div class="space-y-2">
-                <label class="text-[11px] font-bold text-blue-400/70 uppercase tracking-widest ml-1">Identity</label>
+        <div class="space-y-5">
+            <div>
+                <label class="block text-[10px] font-bold text-blue-400/70 uppercase tracking-widest mb-2 ml-1">Username Identity</label>
                 <div class="relative">
-                    <i data-lucide="user-circle" class="absolute left-4 top-4 w-5 h-5 text-blue-400/40"></i>
+                    <i data-lucide="user" class="absolute left-4 top-[15px] w-5 h-5 text-blue-400/40"></i>
                     <input type="text" id="username" 
-                        class="w-full input-field pl-12 pr-4 py-4 rounded-2xl outline-none text-white placeholder-blue-300/20" 
-                        placeholder="Username">
+                        class="w-full input-glass pl-12 pr-4 py-3.5 rounded-xl text-white placeholder-white/10 outline-none text-sm" 
+                        placeholder="Masukkan username anda">
                 </div>
             </div>
 
-            <div class="space-y-2">
-                <label class="text-[11px] font-bold text-blue-400/70 uppercase tracking-widest ml-1">Security Key</label>
+            <div>
+                <label class="block text-[10px] font-bold text-blue-400/70 uppercase tracking-widest mb-2 ml-1">Password Key</label>
                 <div class="relative">
-                    <i data-lucide="lock" class="absolute left-4 top-4 w-5 h-5 text-blue-400/40"></i>
+                    <i data-lucide="lock" class="absolute left-4 top-[15px] w-5 h-5 text-blue-400/40"></i>
                     <input type="password" id="password" 
-                        class="w-full input-field pl-12 pr-4 py-4 rounded-2xl outline-none text-white placeholder-blue-300/20" 
+                        class="w-full input-glass pl-12 pr-4 py-3.5 rounded-xl text-white placeholder-white/10 outline-none text-sm" 
                         placeholder="••••••••">
                 </div>
             </div>
 
+            <div id="errorAlert" class="hidden p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs text-center flex items-center justify-center gap-2">
+                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                <span id="errorText">Gagal koneksi ke server.</span>
+            </div>
+
             <button onclick="handleLogin()" id="btnLogin" 
-                class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 mt-8 shadow-xl shadow-blue-900/40 transition-all active:scale-95">
-                <span>MASUK KE SISTEM</span>
-                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                class="w-full btn-glow text-white text-sm font-bold py-4 rounded-xl flex items-center justify-center gap-2 mt-8 cursor-pointer">
+                <span>MASUK SISTEM</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </button>
         </div>
 
-        <!-- Branding Footer -->
-        <div class="mt-12 text-center border-t border-white/5 pt-6">
-            <p class="text-[10px] text-white/20 uppercase tracking-[0.4em] font-medium">Digital Solution by</p>
-            <p class="text-sm font-bold text-blue-400/60 mt-1 italic tracking-wide">Notes of OD</p>
+        <div class="text-center mt-6">
+            <a href="guest.html" class="text-xs text-blue-400/50 hover:text-blue-400 transition-all underline">Buka Portal Publik & Verifikasi Dokumen</a>
+        </div>
+
+        <div class="mt-10 text-center border-t border-white/5 pt-6">
+            <p class="text-[9px] text-white/20 uppercase tracking-[0.3em] font-medium">Digital Identity</p>
+            <p class="text-xs font-bold text-blue-400/50 mt-1 italic">Notes of OD</p>
         </div>
     </div>
 
     <script>
-        // Inisialisasi Ikon Lucide
+        // Inisialisasi Ikon Lucide secara instan
         lucide.createIcons();
 
-        // API URL dari Google Apps Script Anda (Sesuai image_99a8bb.png)
+        // Gunakan URL Web App dari GAS Anda yang berakhiran /exec
         const API_URL = "https://script.google.com/macros/s/AKfycbwh15imLvWk31qi-ug4MWdlREXV_exstww6e9ssKAR92R22ggSxwgbvcY7dgpiwK3Sh/exec";
 
         async function handleLogin() {
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
+            const userVal = document.getElementById('username').value.trim();
+            const passVal = document.getElementById('password').value.trim();
             const btn = document.getElementById('btnLogin');
+            const alertBox = document.getElementById('errorAlert');
+            const alertText = document.getElementById('errorText');
 
-            if (!user || !pass) {
-                alert("Mohon masukkan Username dan Password!");
+            // Sembunyikan alert error lama sebelum mencoba login lagi
+            alertBox.classList.add('hidden');
+
+            if(!userVal || !passVal) {
+                showError("Mohon isi username dan password!");
                 return;
             }
 
-            // Animasi Loading
+            // Atur tombol ke status loading
             btn.disabled = true;
             btn.classList.add('opacity-50', 'cursor-not-allowed');
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> <span>MENGOTENTIKASI...</span>`;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> <span>MENGOTENTIKASI...</span>`;
             lucide.createIcons();
 
             try {
-                // Fetch data dari Google Apps Script
-                const response = await fetch(`${API_URL}?action=login&u=${user}&p=${pass}`);
+                // Fetch data dari server Google Apps Script dengan timeout simulasi
+                const response = await fetch(`${API_URL}?action=login&u=${userVal}&p=${passVal}`);
                 const res = await response.json();
 
                 if (res.success) {
-                    // Simpan data user ke Local Storage browser
+                    // Simpan data user lokal
                     localStorage.setItem("ycp_user", JSON.stringify(res.user));
 
-                    // Pengalihan Berdasarkan Role (Direktur/User)
+                    // Pengalihan berdasarkan Role yang terdaftar di Google Sheet
                     if (res.user.role === "DIREKTUR") {
                         window.location.href = "direktur.html";
                     } else if (res.user.role === "USER") {
@@ -156,18 +172,25 @@
                         window.location.href = "guest.html";
                     }
                 } else {
-                    alert("Akses Ditolak: " + res.message);
+                    showError("Autentikasi Gagal: " + res.message);
                 }
-            } catch (error) {
-                alert("Kesalahan Jaringan: Pastikan Web App GAS sudah di-deploy sebagai 'Anyone'.");
-                console.error(error);
+            } catch (e) {
+                showError("Gagal terhubung ke server. Pastikan Web App GAS Anda sudah di-deploy ulang sebagai 'Anyone'.");
+                console.error(e);
             }
 
-            // Kembalikan tombol jika gagal
+            // Kembalikan tombol ke keadaan normal jika proses gagal
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            btn.innerHTML = `<span>MASUK KE SISTEM</span> <i data-lucide="chevron-right" class="w-5 h-5"></i>`;
+            btn.innerHTML = `<span>MASUK SISTEM</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>`;
             lucide.createIcons();
+        }
+
+        function showError(msg) {
+            const alertBox = document.getElementById('errorAlert');
+            const alertText = document.getElementById('errorText');
+            alertText.innerText = msg;
+            alertBox.classList.remove('hidden');
         }
     </script>
 </body>
